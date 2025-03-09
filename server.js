@@ -7,6 +7,11 @@ const path = require('path'); // Ensure 'path' is imported at the top
 
 const app = express(); // Initialize the Express app
 
+const decodeRequestPath = (req, res, next) => {
+    req.url = decodeURIComponent(req.url);
+    next();
+};
+
 // Enable CORS for your GitHub Pages domain
 app.use(cors({
     origin: 'https://zzon0902.github.io', // Allow requests only from your GitHub Pages domain
@@ -14,11 +19,12 @@ app.use(cors({
     credentials: true // Allow credentials if needed
 }));
 
-app.use('/audio', express.static(path.join(__dirname, 'audio')));
+app.use('/images', decodeRequestPath, express.static(path.join(__dirname, 'images')));
+app.use('/audio', decodeRequestPath, express.static(path.join(__dirname, 'audio')));
 
-
-// Serve static files from the 'images' directory
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.get('/', (req, res) => {
+    res.send('Server is running and serving images & audio!');
+});
 
 // Default endpoint for testing
 app.use(express.static(path.join(__dirname, 'public')));
@@ -106,8 +112,8 @@ app.post('/submit-homework', (req, res) => {
 });
 
 // Start the server
-app.listen(5000, '0.0.0.0', () => {
-    console.log('Server running on port 5000');
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
-
 
