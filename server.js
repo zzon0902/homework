@@ -21,9 +21,8 @@ app.use('/audio', express.static(path.join(__dirname, 'audio')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Default endpoint for testing
-app.get('/', (req, res) => {
-    res.send('Server is running and serving images!');
-});
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // Middleware to log incoming requests
 app.use((req, res, next) => {
