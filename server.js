@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 const express = require('express');
 const Busboy = require('busboy');
 const cors = require('cors');
@@ -227,4 +227,4 @@ app.listen(5000, '0.0.0.0', () => {
     console.log('Server running on port 5000');
 });
 
->>>>>>> 41276a8 (Fixed server to serve homework files)
+
