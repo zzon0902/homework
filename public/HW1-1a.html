@@ -141,21 +141,24 @@
     <audio id="audio-player" preload="auto"></audio>
     <script>
         // Image logic
-    const images = [
-    { src: "images/set%20(1)/LRP.jpg", audio: "null" },
-    { src: "images/set%20(1)/1.jpg", audio: "audio/set%20(1)/1.mp3" },
-    { src: "images/set%20(1)/2.jpg", audio: "audio/set%20(1)/2.mp3" },
-    { src: "images/set%20(1)/3.jpg", audio: "audio/set%20(1)/3.mp3" },
-    { src: "images/set%20(1)/4.jpg", audio: "audio/set%20(1)/4.mp3" },
-    { src: "images/set%20(1)/5.jpg", audio: "audio/set%20(1)/5.mp3" },
-    { src: "images/set%20(1)/6.jpg", audio: "audio/set%20(1)/6.mp3" },
-    { src: "images/set%20(1)/7.jpg", audio: "audio/set%20(1)/7.mp3" },
-    { src: "images/set%20(1)/8.jpg", audio: "audio/set%20(1)/8.mp3" },
-    { src: "images/set%20(1)/9.jpg", audio: "audio/set%20(1)/9.mp3" },
-    { src: "images/set%20(1)/10.jpg", audio: "audio/set%20(1)/10.mp3" },
-    { src: "images/set%20(1)/11.jpg", audio: "audio/set%20(1)/11.mp3" },
-    { src: "images/set%20(1)/Submit.jpg", audio: "null" }
+    const baseUrl = "https://hw-adbw.onrender.com";
+
+const images = [
+    { src: `${baseUrl}/images/set%20(1)/LRP.jpg`, audio: "null" },
+    { src: `${baseUrl}/images/set%20(1)/1.jpg`, audio: `${baseUrl}/audio/set%20(1)/1.mp3` },
+    { src: `${baseUrl}/images/set%20(1)/2.jpg`, audio: `${baseUrl}/audio/set%20(1)/2.mp3` },
+    { src: `${baseUrl}/images/set%20(1)/3.jpg`, audio: `${baseUrl}/audio/set%20(1)/3.mp3` },
+    { src: `${baseUrl}/images/set%20(1)/4.jpg`, audio: `${baseUrl}/audio/set%20(1)/4.mp3` },
+    { src: `${baseUrl}/images/set%20(1)/5.jpg`, audio: `${baseUrl}/audio/set%20(1)/5.mp3` },
+    { src: `${baseUrl}/images/set%20(1)/6.jpg`, audio: `${baseUrl}/audio/set%20(1)/6.mp3` },
+    { src: `${baseUrl}/images/set%20(1)/7.jpg`, audio: `${baseUrl}/audio/set%20(1)/7.mp3` },
+    { src: `${baseUrl}/images/set%20(1)/8.jpg`, audio: `${baseUrl}/audio/set%20(1)/8.mp3` },
+    { src: `${baseUrl}/images/set%20(1)/9.jpg`, audio: `${baseUrl}/audio/set%20(1)/9.mp3` },
+    { src: `${baseUrl}/images/set%20(1)/10.jpg`, audio: `${baseUrl}/audio/set%20(1)/10.mp3` },
+    { src: `${baseUrl}/images/set%20(1)/11.jpg`, audio: `${baseUrl}/audio/set%20(1)/11.mp3` },
+    { src: `${baseUrl}/images/set%20(1)/Submit.jpg`, audio: "null" }
 ];
+
 
 const imageElement = document.getElementById('homework-image');
 const audioPlayer = document.getElementById('audio-player');
