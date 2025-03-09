@@ -1,0 +1,7 @@
+
+	authtoken: 2ri4wj4uR9NVL1h9SvkPOKITClv_4XGxkdj4sqJc7HtA4Jqjitunnels:
+  fixed-domain:
+    proto: http
+    addr: 5000
+    subdomain: fleet-kingfish-basically
+    region: jp

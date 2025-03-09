@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Homework Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+        }
+        .homework-container {
+            text-align: center;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .homework-container img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        .controls, .navigation {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button.prev, button.next {
+            background-color: #ffc107;
+            color: white;
+        }
+        button.record {
+            background-color: #28a745;
+            color: white;
+        }
+        button.stop {
+            background-color: #dc3545;
+            color: white;
+        }
+        button.submit {
+            background-color: #007bff;
+            color: white;
+            margin-top: 20px;
+        }
+        button:disabled {
+            background-color: #d3d3d3;
+            color: #8c8c8c;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="homework-container">
+        <h2>Homework Assignment</h2>
+        <img src="" alt="Homework Image" id="homework-image">
+        <div class="navigation">
+            <button class="prev" id="prev-btn" disabled>Previous</button>
+            <button class="next" id="next-btn">Next</button>
+        </div>
+        <p id="status">Status: Not recording</p>
+        <div class="controls">
+            <button class="record" id="record-btn">Start Recording</button>
+            <button class="stop" id="stop-btn" disabled>Stop Recording</button>
+        </div>
+        <audio id="audio-playback" controls style="display: none; margin-top: 15px;"></audio>
+        <label for="student-name">Your Name:</label>
+        <input type="text" id="student-name" placeholder="Enter your name" required style="display: block; margin: 10px auto; padding: 5px;">
+        <button class="submit" id="submit-btn" disabled>Submit Homework</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
