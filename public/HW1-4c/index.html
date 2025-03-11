@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Homework Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+        }
+
+        .homework-container {
+            text-align: center;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .homework-container img {
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    object-fit: cover;
+    object-position: center center; /* Center cropping adjustment */
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: block;
+}
+
+
+        label[for="student-name"] {
+            display: block;
+            font-weight: bold;
+            margin: 15px 0 5px;
+            text-align: left;
+        }
+
+        #student-name {
+            display: block;
+            margin: 0 auto 15px;
+            padding: 5px;
+            width: 90%;
+            max-width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 300px;
+            height: 40px;
+            margin: 15px 0;
+            visibility: hidden;
+        }
+
+        .audio-visible {
+            visibility: visible;
+        }
+
+        .controls, .navigation {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button.record {
+            background-color: #28cf7f;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        button.stop {
+            background-color: #ff5757;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        button.submit {
+            background-color: #004aad;
+            color: white;
+            margin-top: 20px;
+        }
+
+        button.prev {
+            background-color: #ffbd59;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        button.next {
+            background-color: #ffbd59;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        button:disabled {
+            background-color: #d3d3d3;
+            color: #8c8c8c;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="homework-container">
+        <h2>Homework</h2>
+        <img src="https://via.placeholder.com/300" alt="Homework Image" id="homework-image">
+        <div class="navigation">
+            <button class="prev" id="prev-btn" disabled>◀</button>
+            <button class="next" id="next-btn">▶</button>
+        </div>
+        <p id="status">Status: Not recording</p>
+        <div class="controls">
+            <button class="record" id="record-btn">Start Recording</button>
+            <button class="stop" id="stop-btn" disabled>Stop Recording</button>
+        </div>
+        <audio id="audio-playback" controls></audio>
+        <label for="student-name">Your Name: (영어 이름을 입력하세요.)</label>
+        <input type="text" id="student-name" placeholder="Enter your name" required>
+        <button class="submit" id="submit-btn" disabled>Submit </button>
+    </div>
+    <audio id="audio-player" preload="auto"></audio>
+    <script>
+        // Image logic
+    const baseUrl = "https://hw-adbw.onrender.com";
+
+const images = [
+    { src: `${baseUrl}/images/set%20(1)/LRP.jpg`, audio: "null" },
+    { src: `${baseUrl}/images/set%20(4)/S1.jpg`, audio: `${baseUrl}/audio/set%20(4)/Q1.mp3` },
+    { src: `${baseUrl}/images/set%20(4)/S2.jpg`, audio: `${baseUrl}/audio/set%20(4)/Q1.mp3` },
+    { src: `${baseUrl}/images/set%20(4)/S3.jpg`, audio: `${baseUrl}/audio/set%20(4)/Q1.mp3` },
+    { src: `${baseUrl}/images/set%20(4)/S4.jpg`, audio: `${baseUrl}/audio/set%20(4)/Q1.mp3` },
+    { src: `${baseUrl}/images/set%20(4)/S5.jpg`, audio: `${baseUrl}/audio/set%20(4)/Q1.mp3` },
+    { src: `${baseUrl}/images/set%20(4)/S6.jpg`, audio: `${baseUrl}/audio/set%20(4)/Q1.mp3` },
+    { src: `${baseUrl}/images/set%20(4)/S7.jpg`, audio: `${baseUrl}/audio/set%20(4)/Q1.mp3` },
+    { src: `${baseUrl}/images/set%20(4)/S8.jpg`, audio: `${baseUrl}/audio/set%20(4)/Q1.mp3` },
+    { src: `${baseUrl}/images/set%20(4)/S9.jpg`, audio: `${baseUrl}/audio/set%20(4)/Q1.mp3` },
+    { src: `${baseUrl}/images/set%20(4)/S10.jpg`, audio: `${baseUrl}/audio/set%20(4)/Q1.mp3` },
+    { src: `${baseUrl}/images/set%20(4)/S11.jpg`, audio: `${baseUrl}/audio/set%20(4)/Q1.mp3` },
+    { src: `${baseUrl}/images/set%20(4)/S12.jpg`, audio: `${baseUrl}/audio/set%20(4)/Q1.mp3` },
+    { src: `${baseUrl}/images/set%20(1)/Submit.jpg`, audio: "null" }
+];
+
+
+const imageElement = document.getElementById('homework-image');
+const audioPlayer = document.getElementById('audio-player');
+
+let currentImageIndex = 0;
+
+// Function to update the image and play the associated audio
+const updateImage = () => {
+    const currentItem = images[currentImageIndex];
+    console.log("Loading image:", currentItem.src); // Debug log
+
+    imageElement.src = currentItem.src;
+
+    // Check if audio exists before attempting to play
+    if (currentItem.audio) {
+        audioPlayer.src = currentItem.audio;
+        audioPlayer.play().catch(error => {
+            console.error("Audio playback failed:", error);
+        });
+    } else {
+        console.log("No audio for this image."); // Debug log
+    }
+
+    // Update navigation buttons
+    prevButton.disabled = currentImageIndex === 0;
+    nextButton.disabled = currentImageIndex === images.length - 1;
+};
+
+// Navigation buttons
+const prevButton = document.getElementById('prev-btn');
+const nextButton = document.getElementById('next-btn');
+
+prevButton.addEventListener('click', () => {
+    if (currentImageIndex > 0) {
+        currentImageIndex--;
+        updateImage();
+    }
+});
+
+nextButton.addEventListener('click', () => {
+    if (currentImageIndex < images.length - 1) {
+        currentImageIndex++;
+        updateImage();
+    }
+});
+
+// Initialize the first image and audio
+updateImage();
+
+
+     
+let mediaRecorder;
+let audioChunks = [];
+
+const recordButton = document.getElementById('record-btn');
+const stopButton = document.getElementById('stop-btn');
+const submitButton = document.getElementById('submit-btn');
+const audioPlayback = document.getElementById('audio-playback');
+const statusText = document.getElementById('status');
+
+// Start recording
+recordButton.addEventListener('click', async () => {
+    console.log('Start Recording button clicked.'); // Debug log
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        console.log('Microphone access granted.'); // Debug log
+
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+            console.log('Audio chunk received:', event.data); // Debug log
+        };
+
+        mediaRecorder.onstop = () => {
+            if (audioChunks.length > 0) {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                audioPlayback.src = audioUrl; // set%20the audio source
+                audioPlayback.classList.add('audio-visible'); // Show the audio player
+                audioPlayback.style.visibility = 'visible'; // Ensure it's visible
+                console.log('Audio player updated with URL:', audioUrl); // Debug log
+                submitButton.disabled = false; // Enable the submit button
+                statusText.textContent = 'Submit 버튼을 눌러 녹음 파일을 제출하세요.';
+            } else {
+                console.error('No audio chunks available.');
+            }
+        };
+
+        audioChunks = [];
+        mediaRecorder.start();
+        console.log('Recording started.'); // Debug log
+        statusText.textContent = 'Status: Recording...';
+        recordButton.disabled = true;
+        stopButton.disabled = false;
+    } catch (error) {
+        console.error('Error starting recording:', error);
+        alert('Failed to start recording. Please check microphone permissions.');
+    }
+});
+
+// Stop recording
+stopButton.addEventListener('click', () => {
+    if (mediaRecorder) {
+        mediaRecorder.stop();
+        recordButton.disabled = false;
+        stopButton.disabled = true;
+    }
+});
+
+// Submit homework
+submitButton.addEventListener('click', async () => {
+    const studentName = document.getElementById('student-name').value.trim();
+    console.log('Submit Homework button clicked.');
+    console.log('Student Name:', studentName);
+
+    if (!studentName) {
+        alert('Please enter your name.(아래 칸에 이름을 영어로 입력하세요.)');
+        return;
+    }
+
+    if (audioChunks.length > 0) {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        const formData = new FormData();
+        formData.append('audioFile', audioBlob, 'homework.wav');
+        formData.append('studentName', studentName);
+
+        console.log('FormData content:');
+        for (const pair of formData.entries()) {
+            console.log(`${pair[0]}: ${pair[1]}`);
+        }
+
+        try {
+            const response = await fetch('submit-homework', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                alert('Homework submitted successfully! (숙제 제출 완료!)');
+                console.log('Submission alert shown.');
+                statusText.textContent = 'Status: Homework submitted';
+                submitButton.disabled = true;
+                audioPlayback.classList.remove('audio-visible');
+            } else {
+                console.error('Server responded with error:', response.statusText);
+                alert(`Failed to submit homework. Error: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.error('Error during submission:', error);
+            alert('An error occurred while submitting homework. Please try again.(제출 중에 오류가 생겼어요. 번거롭지만, 다시 시도해주세요.)');
+        }
+    } else {
+        alert('No recording found. Please record before submitting. (녹음한 후에 제출 버튼을 누르세요.)');
+    }
+});
+
+    </script>
+</body>
+</html> 
